@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7f2">
+  <title>Shared cart | CartShare</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body class="room-page">
+  <nav class="navbar room-nav" aria-label="Room navigation">
+    <a class="brand-lockup" href="index.html" aria-label="CartShare home"><img src="assets/logo.svg" alt="" width="32" height="32"><span>cart<span class="brand-accent">share</span></span></a>
+    <div class="room-nav-actions">
+      <button class="icon-button theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><i class="bi bi-moon-stars"></i></button>
+      <button class="btn btn-sm btn-outline-secondary leave-button" type="button" data-leave><i class="bi bi-box-arrow-right"></i><span>Leave room</span></button>
+    </div>
+  </nav>
+  <main class="container room-container">
+    <header class="room-header">
+      <div class="room-title-block">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> SHARED SHOP</div>
+        <h1>Let's fill the <span>basket.</span></h1>
+        <div class="room-code-line"><span>ROOM</span><strong id="room-code-display">------</strong><button id="copy-code" class="icon-button copy-button" type="button" title="Copy room code" aria-label="Copy room code"><i class="bi bi-copy"></i></button><span id="copy-feedback" class="copy-feedback" aria-live="polite"></span></div>
+      </div>
+      <div class="participant-box">
+        <div class="participant-label"><span id="participant-count">0</span> HERE NOW</div>
+        <div id="participant-list" class="participant-list" aria-label="Online participants"></div>
+      </div>
+    </header>
+
+    <div id="room-alert" class="alert d-none" role="alert" aria-live="polite"></div>
+    <div class="room-grid">
+      <section class="main-column" aria-label="Shared shopping cart">
+        <section class="surface add-surface" aria-labelledby="add-heading">
+          <div class="section-heading compact-heading"><div><span class="section-kicker">ADD TO THE LIST</span><h2 id="add-heading">What's going in?</h2></div><span class="heading-icon"><i class="bi bi-bag-plus"></i></span></div>
+          <form id="add-item-form" class="add-form" novalidate>
+            <div class="add-field item-name-field"><label class="form-label" for="item-name">Item</label><input class="form-control" id="item-name" name="name" maxlength="60" placeholder="e.g. Pasta" required><div class="invalid-feedback">Enter an item name (1–60 characters).</div></div>
+            <div class="add-field"><label class="form-label" for="item-price">Price</label><div class="input-group"><span class="input-group-text currency-symbol">$</span><input class="form-control" id="item-price" name="price" type="number" min="0.01" max="99999" step="0.01" placeholder="0.00" required></div><div class="invalid-feedback d-block" id="price-feedback"></div></div>
+            <div class="add-field qty-field"><label class="form-label" for="item-quantity">Qty</label><input class="form-control" id="item-quantity" name="quantity" type="number" min="1" max="99" step="1" value="1" required></div>
+            <div class="add-field"><label class="form-label" for="item-category">Category</label><select class="form-select" id="item-category" name="category"><option>Groceries</option><option>Snacks</option><option>Drinks</option><option>Household</option><option>Other</option></select></div>
+            <button class="btn btn-primary add-submit" type="submit"><i class="bi bi-plus-lg"></i><span>Add item</span></button>
+          </form>
+        </section>
+
+        <section class="catalog-section" aria-labelledby="catalog-heading">
+          <div class="section-heading"><div><span class="section-kicker">QUICK PICKS</span><h2 id="catalog-heading">Popular this week</h2></div><span class="catalog-caption">Tap to add · edit price after</span></div>
+          <div id="product-catalog" class="catalog-grid"></div>
+        </section>
+
+        <section class="surface cart-surface" aria-labelledby="cart-heading">
+          <div class="section-heading cart-heading"><div><span class="section-kicker">YOUR SHARED LIST</span><h2 id="cart-heading">The cart <span id="cart-item-count" class="count-pill">0</span></h2></div><button id="receipt-open" class="btn btn-dark receipt-trigger" type="button" data-bs-toggle="modal" data-bs-target="#receipt-modal"><i class="bi bi-receipt"></i> <span>Receipt</span></button></div>
+          <div id="cart-empty" class="empty-state"><div class="empty-basket">🧺</div><h3>The cart is taking a breather</h3><p>Add something above or pick a quick item to get started.</p></div>
+          <div id="cart-content" class="cart-content d-none">
+            <div class="table-responsive cart-table-wrap"><table class="table cart-table"><thead><tr><th scope="col">ITEM</th><th scope="col">QTY</th><th scope="col">PRICE</th><th scope="col">SUBTOTAL</th><th scope="col">ADDED BY</th><th scope="col"><span class="visually-hidden">Actions</span></th></tr></thead><tbody id="cart-table-body"></tbody></table></div>
+            <div id="cart-mobile-list" class="cart-mobile-list" aria-label="Cart items"></div>
+            <div class="cart-summary-row"><div class="per-user-totals"><h3>Spending by person</h3><div id="per-user-totals"></div></div><div class="grand-total"><span>GRAND TOTAL</span><strong id="grand-total">$0.00</strong></div></div>
+          </div>
+        </section>
+
+        <section class="surface shipping-surface" aria-labelledby="shipping-heading">
+          <div class="shipping-top"><div><span class="section-kicker">A LITTLE EXTRA PERK</span><h2 id="shipping-heading">Free shipping</h2></div><div class="threshold-control"><label for="shipping-threshold">Goal</label><div class="input-group input-group-sm"><span class="input-group-text currency-symbol">$</span><input id="shipping-threshold" type="number" class="form-control" min="1" max="9999" step="1" aria-label="Free shipping threshold"></div></div></div>
+          <div class="progress shipping-progress" role="progressbar" aria-label="Free shipping progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="shipping-progress-bar" class="progress-bar"></div></div>
+          <p id="shipping-message" class="shipping-message">Add items to start filling the bar.</p>
+        </section>
+      </section>
+
+      <aside class="activity-column" aria-label="Room activity">
+        <section class="surface activity-surface">
+          <div class="activity-heading"><div><span class="section-kicker">HAPPENING LIVE</span><h2>Activity</h2></div><button id="clear-log" class="icon-button creator-only" type="button" aria-label="Clear activity log" title="Clear activity log"><i class="bi bi-trash3"></i></button></div>
+          <label for="activity-filter" class="visually-hidden">Filter activity by person</label><select id="activity-filter" class="form-select form-select-sm activity-filter"><option value="all">Everyone</option></select>
+          <div id="activity-feed" class="activity-feed" aria-live="polite" aria-relevant="additions text"></div>
+          <p id="activity-empty" class="activity-empty">Room activity will show here.</p>
+        </section>
+        <div class="sync-status"><span class="sync-dot"></span><span>Changes sync across your open tabs</span></div>
+      </aside>
+    </div>
+  </main>
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <div class="modal fade" id="receipt-modal" tabindex="-1" aria-labelledby="receipt-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable"><div class="modal-content receipt-modal-content">
+      <div class="modal-header no-print"><div><span class="section-kicker">READY TO SETTLE UP?</span><h2 class="modal-title" id="receipt-modal-title">Your receipt</h2></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+      <div class="modal-body"><div id="receipt-content" class="receipt-paper"></div></div>
+      <div class="modal-footer no-print"><label class="form-check form-switch equal-split-control"><input id="equal-split" class="form-check-input" type="checkbox" role="switch"><span class="form-check-label">Split equally</span></label><button id="download-csv" class="btn btn-outline-secondary" type="button"><i class="bi bi-download"></i> CSV</button><button id="print-receipt" class="btn btn-primary" type="button"><i class="bi bi-printer"></i> Print</button></div>
+    </div></div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/storage.js"></script><script src="js/auth.js"></script><script src="js/activity.js"></script><script src="js/sync.js"></script><script src="js/cart.js"></script><script src="js/receipt.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => CartShareAuth.initRoom());</script>
+</body>
+</html>

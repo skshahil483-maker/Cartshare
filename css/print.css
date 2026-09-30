@@ -1,0 +1,18 @@
+@page { size: A4; margin: 16mm 15mm; }
+@media print {
+  html, body { width: 100%; min-height: 0; margin: 0 !important; color: #000 !important; background: #fff !important; font: 10pt Arial, sans-serif !important; }
+  body * { visibility: hidden !important; }
+  #receipt-modal, #receipt-modal * { visibility: visible !important; }
+  #receipt-modal { position: absolute !important; inset: 0 !important; display: block !important; overflow: visible !important; background: #fff !important; }
+  #receipt-modal .modal-dialog { width: 100% !important; max-width: none !important; margin: 0 !important; transform: none !important; }
+  #receipt-modal .modal-content, #receipt-modal .modal-body { overflow: visible !important; border: 0 !important; border-radius: 0 !important; background: #fff !important; box-shadow: none !important; }
+  #receipt-modal .modal-header, #receipt-modal .modal-footer, .no-print { display: none !important; }
+  #receipt-modal .modal-body { padding: 0 !important; }
+  .receipt-paper { max-width: none !important; margin: 0 !important; padding: 0 !important; color: #000 !important; box-shadow: none !important; }
+  .receipt-brand { border-bottom: 2px solid #000 !important; }
+  .receipt-table th, .receipt-table td { border-color: #777 !important; color: #000 !important; }
+  .receipt-meta, .receipt-room span, .receipt-audit { color: #333 !important; }
+  .receipt-total-row { border-color: #000 !important; }
+  tr, .receipt-split-row, .receipt-summary { page-break-inside: avoid; break-inside: avoid; }
+  a { color: #000 !important; text-decoration: none !important; }
+}
